@@ -4,33 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7aaaf50a-c70e-40e5-a0da-48518b5e3409" name="Changes" comment="- Crip Ausgabe hinzugefügt.">
-      <change afterPath="$PROJECT_DIR$/Figures/H2DR.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Figures/HLReelAD.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Figures/HLReelAU.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Figures/HRReelAD.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Figures/HRReelAU.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Figures/Testi.json" afterDir="false" />
+    <list default="true" id="7aaaf50a-c70e-40e5-a0da-48518b5e3409" name="Changes" comment="- Addons in die Simple_Figures eingefügt um übergänge zu ermöglichen.">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DanceCreatorUI.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ComplexFigure.py" beforeDir="false" afterPath="$PROJECT_DIR$/ComplexFigure.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dance.py" beforeDir="false" afterPath="$PROJECT_DIR$/Dance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DanceCreator.py" beforeDir="false" afterPath="$PROJECT_DIR$/DanceCreator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DanceFloor.py" beforeDir="false" afterPath="$PROJECT_DIR$/DanceFloor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/Figures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H1DR.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/H1DR.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H1DR2c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H2DR3c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H2DRSL.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HReelA.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HReelASLEnddown.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HReelASLEndup.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HReelASLSTup.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HReelASLStdown.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 1-8.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 1-8.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 13-16.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 13-16.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 21-24.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 21-24.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 25-32.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 25-32.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 9-12.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 9-12.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SimpleFigure.py" beforeDir="false" afterPath="$PROJECT_DIR$/SimpleFigure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,6 +61,7 @@
   "keyToString": {
     "Python.ComplexFigure.executor": "Debug",
     "Python.DanceCreator.executor": "Run",
+    "Python.DanceCreatorUI.executor": "Run",
     "Python.DanceCreator_old.executor": "Run",
     "Python.DanceFloor.executor": "Run",
     "Python.Figures.executor": "Run",
@@ -89,9 +73,11 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/Git/DanceCreator/Figures"
+    "last_opened_file_path": "E:/Git/DanceCreator/Figures",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
     "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
@@ -108,7 +94,7 @@
       <recent name="E:\Git\DanceCreator\Figures" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.DanceCreator">
+  <component name="RunManager">
     <configuration name="DanceCreator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DanceCreator" />
       <option name="ENV_FILES" value="" />
@@ -228,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756741460680</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="- Addons in die Simple_Figures eingefügt um übergänge zu ermöglichen.">
+      <option name="closed" value="true" />
+      <created>1758967314209</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1758967314210</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -257,7 +251,8 @@
     <MESSAGE value="Serielle Figure implementiert" />
     <MESSAGE value="- Aufteilung in einfache iund Komplexe Figuren&#10;- Komplexe Figuren können Figuren seriel und parallel anordnen.&#10;- Marrie's Wedding als Bsp" />
     <MESSAGE value="- Crip Ausgabe hinzugefügt." />
-    <option name="LAST_COMMIT_MESSAGE" value="- Crip Ausgabe hinzugefügt." />
+    <MESSAGE value="- Addons in die Simple_Figures eingefügt um übergänge zu ermöglichen." />
+    <option name="LAST_COMMIT_MESSAGE" value="- Addons in die Simple_Figures eingefügt um übergänge zu ermöglichen." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -266,11 +261,6 @@
           <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch.py</url>
           <line>63</line>
           <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/ComplexFigure.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -281,10 +271,5 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="FigObjs[0]" language="Python" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

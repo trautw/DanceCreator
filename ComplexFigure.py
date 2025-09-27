@@ -11,7 +11,7 @@ class ComplexFigure(Fig.Figure):
     def __init__(self, loadFile, Anchor = [0,0]):
         self.name = loadFile
         self.Anchor = Anchor
-        self.loadFigure(loadFile)
+#        self.loadFigure(loadFile)
 
     def clear(self):
         super().clear()
@@ -91,7 +91,10 @@ class ComplexFigure(Fig.Figure):
                     retList[1].append(self.loadSubFigure(FigList, myAnchor))
                 return retList
 
-    def loadFigure(self, Filename):
+    def loadFigure(self, Filename = ''):
+        if Filename == '':
+            Filename = self.name
+
         with open(os.getcwd()+'/Figures/' + Filename + '.json', 'r') as f:
             FigData = json.load(f)
         myKeys = FigData.keys()

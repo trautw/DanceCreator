@@ -1,15 +1,15 @@
 from SimpleFigure import SimpleFigure
-from ComplexFigure import ComplexFigure
 import json
 import os
 
 def getFigure(Filename, Anchor = [0,0], Addons = []):
-
+    from ComplexFigure import ComplexFigure  # Lazy Import, um zirkulären Import zu vermeiden
     with open(os.getcwd()+'/Figures/' + Filename + '.json', 'r') as f:
         FigData = json.load(f)
 
     if 'FigureList' in FigData.keys():
         myFig = ComplexFigure(Filename, Anchor)
+        myFig.loadFigure()
     else:
         myFig = SimpleFigure(Filename, Anchor, Addons)
 
@@ -31,4 +31,3 @@ def printCrip(myCrips):
 
 def showCrips(myFig, myDF):
     printCrip(myFig.getCrips(myDF))
-
