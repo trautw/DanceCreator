@@ -1,4 +1,6 @@
-{"Name": "1DR",
+{
+  "Name": "1DR",
   "Desc": "Diagonal Reel on the first diagonal",
-  "FigureList": ["s",[[0,0], "H1DR"], [[0,0], "H1DR"]],
-  "Version": 3}
+  "FigureList": ["s", [[0,0], "H1DR"], [[0,0], "H1DR"]],
+  "Version": 3
+}

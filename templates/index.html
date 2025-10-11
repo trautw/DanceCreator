@@ -1,0 +1,67 @@
+<!--
+templates/index.html
+Haupt-HTML-Seite der DanceTreeApp.
+
+Aufbau:
+ - Obere Toolbar: Dateiname-Eingabe + Laden-Button
+ - Drei-Spalten-Layout:
+    - links: Figurenliste (aus der geladenen JSON)
+    - mitte: Tanzfläche (Platzhalter, "in Arbeit")
+    - rechts: Baumstruktur des Tanzes
+
+Wichtig:
+ - Die eigentliche Datenlogik wird in static/app.js implementiert.
+ - style.css enthält das Layout.
+-->
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dance Tree Viewer</title>
+  <!-- Einbinden von CSS aus dem static-Ordner -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- jsTree CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.15/dist/themes/default/style.min.css">
+</head>
+<body>
+  <!-- Toolbar: Datei auswählen / laden -->
+  <header id="toolbar" role="banner" aria-label="Toolbar">
+    <div class="toolbar-inner">
+      <label for="fileInput">Datei:</label>
+      <input id="fileInput" type="text" value="HLReelAD" aria-label="JSON-Dateiname" />
+      <button id="loadButton" aria-label="Lade Datei">Laden</button>
+      <span id="status" aria-live="polite" class="status">Bereit</span>
+    </div>
+  </header>
+
+  <!-- Hauptbereich: 3-Spalten-Layout -->
+  <main id="main" role="main">
+    <!-- Linke Spalte: Figurenliste -->
+    <aside id="figures" aria-label="Figurenliste">
+      <h2>Figuren</h2>
+      <ul id="figureList" class="list"></ul>
+    </aside>
+
+    <!-- Mittlere Spalte: Tanzfläche (Platzhalter) -->
+    <section id="stage" aria-label="Tanzfläche">
+      <h2>Tanzfläche</h2>
+      <div class="placeholder">Tanzfläche (in Arbeit)</div>
+    </section>
+
+    <!-- Rechte Spalte: Baumstruktur -->
+    <aside id="treeview" aria-label="Struktur">
+      <h2>Struktur</h2>
+      <!-- jsTree Container -->
+      <div id="treeContainer" class="tree"></div>
+    </aside>
+  </main>
+
+  <!-- App-Logic: lädt /tree?file=... und füllt die Bereiche -->
+  <!-- jQuery (Pflicht für jsTree) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jsTree JS -->
+  <script src="https://cdn.jsdelivr.net/npm/jstree@3.3.15/dist/jstree.min.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
