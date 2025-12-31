@@ -5,6 +5,7 @@
   "EndPos": [[0, 2], [0, 1], [0, 0]],
   "Name": "HReelA",
   "Desc": "Half left shoulder reel of three acros down",
+  "Formation": "reel",
   "Bars": 4,
   "Version": 2,
   "Addons":{

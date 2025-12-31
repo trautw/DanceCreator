@@ -7,6 +7,7 @@
   "EndPos": [[2, 2], [1.5, 1.5], [0.5, 0.5], [0, 0]],
   "Name": "H1DR",
   "Desc": "Half Diagonal Reel on the first diagonal",
+  "Formation": "reel",
   "Bars": 4,
   "Version": 2,
   "Addons":{

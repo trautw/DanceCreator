@@ -7,6 +7,7 @@
   "EndPos": [[0, 2], [0.5, 1.5], [1.5, 0.5], [2, 0]],
   "Name": "H2DR",
   "Desc": "Half Diagonal Reel on the second diagonal",
+  "Formation": "reel",
   "Bars": 4,
   "Version": 2,
   "Addons":{

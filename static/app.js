@@ -9,52 +9,6 @@
 */
 
 /**
- * Hilfsfunktion: holt die Tree-Daten vom Server.
- * Erwartet eine flache Node-Liste (id, parent_id, name, type, meta).
- */
-async function fetchTree(filename) {
-  const url = '/tree?file=' + encodeURIComponent(filename);
-  const res = await fetch(url);
-  if (!res.ok) {
-    const err = await res.json().catch(()=>({error:res.statusText}));
-    throw new Error(err.error || res.statusText || 'Fehler beim Laden');
-  }
-  return await res.json();
-}
-
-/**
- * Baut aus einer flachen Node-Liste eine verschachtelte Struktur.
- * Gibt das Root-Objekt zurück (das parent_id === null hat).
- */
-function buildNested(nodes) {
-  const map = new Map();
-  nodes.forEach(n => map.set(n.id, {...n, children: []}));
-  let root = null;
-  map.forEach(n => {
-    if (n.parent_id === null) {
-      root = n;
-    } else if (map.has(n.parent_id)) {
-      map.get(n.parent_id).children.push(n);
-    }
-  });
-  return root;
-}
-
-/**
- * Wandelt die flache Node-Liste in das jsTree-Format um.
- * jsTree erwartet: [{ id, parent, text, data, ... }]
- */
-function toJsTreeData(nodes) {
-  return nodes.map(n => ({
-    id: n.id,
-    parent: n.parent_id === null ? '#' : n.parent_id,
-    text: n.name || ('Knoten ' + n.id),
-    type: n.type || 'default',
-    data: n.meta || {}
-  }));
-}
-
-/**
  * Initialisiert jsTree im treeContainer mit den übergebenen Daten.
  */
 function renderJsTree(nodes) {
@@ -66,7 +20,7 @@ function renderJsTree(nodes) {
       data: treeData,
       check_callback: true
     },
-    plugins: ['types', 'dnd', 'wholerow'],
+    plugins: ['types', 'dnd', 'wholerow', "contextmenu"],
     types: {
       default: { icon: 'jstree-icon jstree-file' },
       simple: { icon: 'jstree-icon jstree-file' },
@@ -74,6 +28,10 @@ function renderJsTree(nodes) {
     }
   });
 }
+
+$('#treeContainer').on("changed.jstree", function (e, data) {
+  setStatus(data.node.text + " selected");
+});
 
 /**
  * Holt alle Figuren-Dateien aus /Figures und analysiert sie.
@@ -140,13 +98,13 @@ function setStatus(text) {
  */
 async function loadAndRender() {
   const input = document.getElementById('fileInput');
-  let fname = input.value.trim() || 'HLReelAD';
+  let fname = input.value.trim() || 'Marries Wedding';
   if (!fname.endsWith('.json')) {
     fname += '.json';
   }
   setStatus('Lade ' + fname + ' ...');
   try {
-    const nodes = await fetchTree(fname);
+    const nodes = await get_nodes(fname);
     // Figurenliste links: alle Figuren aus /Figures
     fetchAndRenderFigureList();
     // Baumstruktur rechts: jsTree

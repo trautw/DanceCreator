@@ -5,5 +5,7 @@
   "EndPos": [[0, 0], [0, 2]],
   "Name": "1cRT",
   "Desc": "Two bar right hand turn for one couple",
+  "Formation": "turn",
+  "Addons": {},
   "Bars": 2,
   "Version": 2}

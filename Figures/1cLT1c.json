@@ -6,6 +6,7 @@
   "Faceing": [[1,2],[-1,0]],
   "Name": "1cLT1c",
   "Desc": "Four bar left hand turn for one couple end facing first corner",
+  "Formation": "turn",
   "Bars": 4,
   "Version": 2,
   "Addons": {}}

@@ -23,11 +23,11 @@
   },
   "oneOf": [
     {
-      "required": ["Name", "Desc", "Version", "Addons", "Bars", "StartPos", "EndPos", "CriptDesc"],
+      "required": ["Name", "Desc", "Formation", "Version", "Addons", "Bars", "StartPos", "EndPos", "CriptDesc"],
       "not": { "required": ["FigureList"] }
     },
     {
-      "required": ["Name", "Desc", "Version", "FigureList"],
+      "required": ["Name", "Desc", "Formation", "Version", "FigureList"],
       "not": { "required": ["Addons", "Bars", "StartPos", "EndPos", "CriptDesc"] }
     }
   ],

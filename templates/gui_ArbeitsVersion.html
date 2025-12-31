@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -31,9 +32,11 @@
       <!-- Suchfeld -->
       <input type="text" id="search" placeholder="Suche nach Name..." style="width: 100%; margin-bottom: 10px;">
 
-      <label for="filter">Filter (Formation):</label>
+      <label for="filter">Filter:</label>
       <select id="filter">
-          <option value="">Alle Formationen</option>
+          <option value="">Alle Typen</option>
+          <option value="simple">Simple</option>
+          <option value="complex">Complex</option>
       </select>
         <div id="figure-list"></div>
     </div>
@@ -147,76 +150,31 @@ $(function() {
 
 <script>
 function loadFigures() {
-    <!-- *********************** -->
-    <!-- ***  Cards füllen   *** -->
-    <!-- *********************** -->
+          <!-- *********************** -->
+          <!-- ***  Cards füllen   *** -->
+          <!-- *********************** -->
 
     fetch('/figures')
         .then(response => response.json())
         .then(data => {
-            // Zuerst die Formation-Optionen dynamisch befüllen
-            populateFormationOptions(data);
-
             const container = document.getElementById('figure-list');
             container.innerHTML = '';
 
             data.forEach(fig => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // Setze formation (falls vorhanden) für das Filtern
-                const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || fig.formation || '';
-                card.dataset.formation = formation.toString().toLowerCase();
-
-                // Store full data as JSON string for potential later use
-                card.dataset.full = JSON.stringify(fig);
-
-                // Zeige alle Infos: Name + Kurzinfo + komplettes Objekt (pre)
-                const name = fig.name || fig.Name || '';
-                const type = fig.type || '';
-                const desc = fig.desc || fig.Description || fig.description || '';
-
-                const pre = document.createElement('pre');
-                pre.className = 'figure-data';
-                pre.textContent = JSON.stringify(fig, null, 2);
+                card.dataset.type = fig.type;
 
                 card.innerHTML = `
-                    <strong>${name}</strong><br>
-                    Formation: ${formation || '—'}<br>
-                    Typ: ${type || '—'}<br>
-                    <em>${desc || ''}</em>
+                    <strong>${fig.name}</strong><br>
+                    Typ: ${fig.type}<br>
+                    <em>${fig.desc || ''}</em>
                 `;
 
-                card.appendChild(pre);
                 container.appendChild(card);
             });
         })
         .catch(err => console.error('Fehler beim Laden der Figuren:', err));
-}
-
-function populateFormationOptions(data) {
-    const select = document.getElementById('filter');
-    // Sammle eindeutige Formation-Werte in Originalschreibweise
-    const formationsMap = new Map();
-    data.forEach(fig => {
-        const val = fig.Formation || fig.formation || fig.formationType || fig.formation_name || fig.formation || '';
-        if (val && typeof val === 'string') {
-            const key = val.toLowerCase();
-            if (!formationsMap.has(key)) formationsMap.set(key, val);
-        }
-    });
-
-    // Entferne alte Options außer der ersten (Alle Formationen)
-    while (select.options.length > 1) select.remove(1);
-
-    // Füge gefundene Optionen sortiert hinzu
-    Array.from(formationsMap.entries())
-         .sort((a,b) => a[1].localeCompare(b[1]))
-         .forEach(([key, original]) => {
-             const opt = document.createElement('option');
-             opt.value = key;
-             opt.textContent = original;
-             select.appendChild(opt);
-         });
 }
 
 // Filter anwenden
@@ -225,7 +183,7 @@ document.getElementById('search').addEventListener('input', function() {
     const cards = document.querySelectorAll('#figure-list .card');
 
     cards.forEach(card => {
-        const name = (card.querySelector('strong') ? card.querySelector('strong').textContent : '').toLowerCase();
+        const name = card.querySelector('strong').textContent.toLowerCase();
         if (name.includes(text)) {
             card.style.display = 'block';
         } else {
@@ -234,16 +192,15 @@ document.getElementById('search').addEventListener('input', function() {
     });
 });
 function applyFilters() {
-    const formation = document.getElementById('filter').value.toLowerCase();
+    const type = document.getElementById('filter').value;
     const text = document.getElementById('search').value.toLowerCase();
     const cards = document.querySelectorAll('#figure-list .card');
 
     cards.forEach(card => {
-        const cardFormation = (card.dataset.formation || '').toLowerCase();
-        const matchesFormation = !formation || cardFormation === formation;
-        const matchesText = (card.querySelector('strong') ? card.querySelector('strong').textContent.toLowerCase().includes(text) : false);
+        const matchesType = !type || card.dataset.type === type;
+        const matchesText = card.querySelector('strong').textContent.toLowerCase().includes(text);
 
-        card.style.display = (matchesFormation && matchesText) ? 'block' : 'none';
+        card.style.display = (matchesType && matchesText) ? 'block' : 'none';
     });
 }
 
