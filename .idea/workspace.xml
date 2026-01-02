@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7aaaf50a-c70e-40e5-a0da-48518b5e3409" name="Changes" comment="- Einlesen der Figure in Figuren_DB, anzeigen und Filtern in index.html funktioniert.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GUI_DanceCreator_App.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI_DanceCreator_App.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Figures/6Hrb.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/6Hrb.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -10,6 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstree@3.3.12/dist/jstree.min.js"></script>
 
+    <!-- kleine Auswahl-Styles für Karten -->
+    <style>
+      .card.selected {
+        background: #f0f7ff;
+        border-color: #9ec5ff;
+        box-shadow: 0 0 0 2px rgba(158,197,255,0.15);
+      }
+      .card:hover { cursor: pointer; }
+    </style>
+
 </head>
 <body>
   <div id="header">
@@ -45,7 +55,7 @@
     <div class="splitter" id="splitter-right"></div>
     <div id="right" class="panel">
       <h3>Dancestruktur</h3>
-      <p><em><div id="treeview"></div></em></p>
+      <div id="treeview"></div>
     </div>
   </div>
 
@@ -147,15 +157,11 @@ $(function() {
 
 <script>
 function loadFigures() {
-    <!-- *********************** -->
-    <!-- ***  Cards füllen   *** -->
-    <!-- *********************** -->
-
+    // Lade Figuren und baue kompakte Karten (nur Name / Desc / Bars)
     fetch('/figures')
         .then(response => response.json())
         .then(data => {
-            // Zuerst die Formation-Optionen dynamisch befüllen
-            populateFormationOptions(data);
+            if (typeof populateFormationOptions === 'function') populateFormationOptions(data);
 
             const container = document.getElementById('figure-list');
             container.innerHTML = '';
@@ -163,17 +169,16 @@ function loadFigures() {
             data.forEach(fig => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // sorge dafür, dass Inhalte oben ausgerichtet sind
                 card.style.alignItems = 'flex-start';
 
                 // Formation als dataset (für Filter)
                 const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || '';
                 card.dataset.formation = formation.toString().toLowerCase();
 
-                // Volle Daten sichern, aber nicht anzeigen
+                // Volle Daten sichern
                 card.dataset.full = JSON.stringify(fig);
 
-                // Linker Bereich: Name + Description (Description OHNE problematische CSS-Klasse)
+                // Linker Bereich: Name + Description
                 const left = document.createElement('div');
                 left.className = 'left';
                 left.style.overflow = 'visible';
@@ -184,42 +189,144 @@ function loadFigures() {
                 nameStrong.style.display = 'block';
 
                 const descVisible = document.createElement('p');
-                descVisible.textContent = fig.desc || fig.Desc || 'no description';
+                descVisible.textContent = fig.desc || fig.Description || fig.Desc || fig.description || '';
                 descVisible.style.display = 'block';
-
-
+                descVisible.style.margin = '4px 0 0 0';
+                descVisible.style.color = '#444';
+                descVisible.style.fontSize = '0.9rem';
+                descVisible.style.lineHeight = '1.2';
+                descVisible.style.overflow = 'visible';
+                descVisible.style.maxHeight = 'none';
+                descVisible.style.whiteSpace = 'normal';
+                descVisible.style.textOverflow = 'clip';
 
                 left.appendChild(nameStrong);
                 left.appendChild(descVisible);
 
-                // Rechter Bereich: Bars (robust)
+                // Rechter Bereich: Bars
                 const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
                 const barsText = (barsVal === undefined || barsVal === null || barsVal === '') ? '—' : barsVal;
                 const barsDiv = document.createElement('div');
                 barsDiv.className = 'bars';
                 barsDiv.textContent = 'Bars: ' + barsText;
 
-                // Karte zusammensetzen
                 card.appendChild(left);
                 card.appendChild(barsDiv);
+
+                // Klick-Handler: zeige vollständige Infos im Arbeitsbereich
+                card.addEventListener('click', function() {
+                    // markiere Auswahl
+                    document.querySelectorAll('#figure-list .card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    // zeige Details
+                    displayFigureDetails(fig);
+                });
 
                 container.appendChild(card);
             });
 
-            // Falls applyFilters existiert, anwenden
             if (typeof applyFilters === 'function') applyFilters();
         })
         .catch(err => console.error('Fehler beim Laden der Figuren:', err));
 }
 
+// Hilfsfunktion: zeigt alle bekannten Informationen einer Figur im Arbeitsbereich an
+function displayFigureDetails(fig) {
+    const middle = document.getElementById('middle');
+    // Überschreibe Inhalt, lasse Überschrift bestehen
+    middle.innerHTML = '<h3>Arbeitsbereich</h3>';
+
+    const wrapper = document.createElement('div');
+    wrapper.style.padding = '8px';
+
+    // Titel / Name
+    const title = document.createElement('h4');
+    title.textContent = fig.name || fig.Name || 'Unnamed';
+    wrapper.appendChild(title);
+
+    // Description
+    const desc = document.createElement('p');
+    desc.textContent = fig.desc || fig.Description || fig.Desc || fig.description || '';
+    desc.style.marginTop = '6px';
+    desc.style.color = '#333';
+    wrapper.appendChild(desc);
+
+    // Meta-Liste (Formation, Bars)
+    const metaList = document.createElement('ul');
+    metaList.style.paddingLeft = '18px';
+    metaList.style.marginTop = '8px';
+
+    const formationLi = document.createElement('li');
+    formationLi.textContent = 'Formation: ' + (fig.Formation || fig.formation || fig.formationType || fig.formation_name || '—');
+    metaList.appendChild(formationLi);
+
+    const barsLi = document.createElement('li');
+    const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
+    barsLi.textContent = 'Bars: ' + ((barsVal === undefined || barsVal === null || barsVal === '') ? '—' : barsVal);
+    metaList.appendChild(barsLi);
+
+    wrapper.appendChild(metaList);
+
+    // Tabelle mit allen Feldern
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+    table.style.marginTop = '10px';
+
+    Object.keys(fig).forEach(key => {
+        const tr = document.createElement('tr');
+        const tdKey = document.createElement('td');
+        tdKey.textContent = key;
+        tdKey.style.width = '30%';
+        tdKey.style.padding = '4px 8px';
+        tdKey.style.fontWeight = '600';
+        tdKey.style.verticalAlign = 'top';
+
+        const tdVal = document.createElement('td');
+        let val = fig[key];
+        if (typeof val === 'object') {
+            try { val = JSON.stringify(val); } catch (e) { val = String(val); }
+        }
+        tdVal.textContent = val === undefined || val === null ? '' : String(val);
+        tdVal.style.padding = '4px 8px';
+        tdVal.style.color = '#222';
+
+        tr.appendChild(tdKey);
+        tr.appendChild(tdVal);
+        table.appendChild(tr);
+    });
+
+    wrapper.appendChild(table);
+
+    // Vollständiges JSON (ausklappbar)
+    const pre = document.createElement('pre');
+    pre.textContent = JSON.stringify(fig, null, 2);
+    pre.style.background = '#f7f7f7';
+    pre.style.padding = '8px';
+    pre.style.borderRadius = '4px';
+    pre.style.marginTop = '10px';
+    pre.style.maxHeight = '240px';
+    pre.style.overflow = 'auto';
+
+    wrapper.appendChild(pre);
+
+    middle.appendChild(wrapper);
+}
+
+// automatische Befüllung des Formation-Filters (wird von loadFigures aufgerufen)
 function populateFormationOptions(data) {
     const select = document.getElementById('filter');
+    if (!select) return;
+
+    // Merke aktuellen Wert, damit wir ihn nach dem Neuaufbau wieder setzen können
+    const previous = select.value || '';
+
     // Sammle eindeutige Formation-Werte in Originalschreibweise
     const formationsMap = new Map();
     data.forEach(fig => {
-        const val = fig.Formation || fig.formation || fig.formationType || fig.formation_name || fig.formation || '';
+        const val = fig.Formation || fig.formation || fig.formationType || fig.formation_name || '';
         if (val && typeof val === 'string') {
-            const key = val.toLowerCase();
+            const key = val.toString().toLowerCase();
             if (!formationsMap.has(key)) formationsMap.set(key, val);
         }
     });
@@ -236,38 +343,56 @@ function populateFormationOptions(data) {
              opt.textContent = original;
              select.appendChild(opt);
          });
-}
 
-// Filter anwenden
-document.getElementById('search').addEventListener('input', function() {
-    const text = this.value.toLowerCase();
-    const cards = document.querySelectorAll('#figure-list .card');
-
-    cards.forEach(card => {
-        const name = (card.querySelector('strong') ? card.querySelector('strong').textContent : '').toLowerCase();
-        if (name.includes(text)) {
-            card.style.display = 'block';
+    // Wenn die vorher gewählte Option noch existiert, stelle sie wieder her
+    if (previous) {
+        const found = Array.from(select.options).some(o => o.value === previous.toString().toLowerCase());
+        if (found) {
+            select.value = previous.toString().toLowerCase();
         } else {
-            card.style.display = 'none';
+            // falls nicht vorhanden, setze auf Alle
+            select.value = '';
         }
-    });
-});
+    }
+
+    // Filter aktualisieren
+    if (typeof applyFilters === 'function') applyFilters();
+}
+
+// Filter- und Suchfunktion: wendet den ausgewählten Formation-Filter und Suche auf die Cards an
 function applyFilters() {
-    const formation = document.getElementById('filter').value.toLowerCase();
-    const text = document.getElementById('search').value.toLowerCase();
+    const filterEl = document.getElementById('filter');
+    const searchEl = document.getElementById('search');
+    const sel = filterEl ? (filterEl.value || '').toString().toLowerCase() : '';
+    const text = searchEl ? (searchEl.value || '').toString().toLowerCase() : '';
+
     const cards = document.querySelectorAll('#figure-list .card');
-
     cards.forEach(card => {
-        const cardFormation = (card.dataset.formation || '').toLowerCase();
-        const matchesFormation = !formation || cardFormation === formation;
-        const matchesText = (card.querySelector('strong') ? card.querySelector('strong').textContent.toLowerCase().includes(text) : false);
+        const cardFormation = (card.dataset.formation || '').toString().toLowerCase();
+        const matchesFormation = !sel || sel === cardFormation;
 
-        card.style.display = (matchesFormation && matchesText) ? 'block' : 'none';
+        const nameEl = card.querySelector('strong');
+        const nameText = nameEl ? (nameEl.textContent || '').toString().toLowerCase() : '';
+        const matchesText = !text || nameText.includes(text);
+
+        const show = matchesFormation && matchesText;
+        card.style.display = show ? 'flex' : 'none';
     });
 }
 
-document.getElementById('filter').addEventListener('change', applyFilters);
-document.getElementById('search').addEventListener('input', applyFilters);
+// Registriere Event-Listener für Filter und Suche
+(function registerFilterListeners(){
+    const filterEl = document.getElementById('filter');
+    if (filterEl) {
+        filterEl.addEventListener('change', applyFilters);
+        filterEl.addEventListener('input', applyFilters);
+    }
+    const searchEl = document.getElementById('search');
+    if (searchEl) searchEl.addEventListener('input', applyFilters);
+
+    // wende aktuellen Filter sofort an (falls schon gesetzt)
+    if (typeof applyFilters === 'function') applyFilters();
+})();
 
 // Figuren direkt beim Start laden
 document.addEventListener('DOMContentLoaded', loadFigures);
