@@ -4,44 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7aaaf50a-c70e-40e5-a0da-48518b5e3409" name="Changes" comment="- mit KI erstelltes UI in HTML5 2. versuch">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/check_figures_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/Cards.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/DC.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/Dance_Creator.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/Tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/resize.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/gui_ArbeitsVersion.html" afterDir="false" />
+    <list default="true" id="7aaaf50a-c70e-40e5-a0da-48518b5e3409" name="Changes" comment="- Einlesen der Figure in Figuren_DB, anzeigen und Filtern in index.html funktioniert.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1DR.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1DR.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cCast1p.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cCast1p.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cLT.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cLT.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cLT1c.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cLT1c.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cRT.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cRT.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cSU.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cSU.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1cWait.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1cWait.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/1pWait.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/1pWait.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/6Hrb.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/6Hrb.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H1DR.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/H1DR.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/H2DR.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/H2DR.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HLReelAD.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/HLReelAD.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HLReelAU.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/HLReelAU.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HRReelAD.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/HRReelAD.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/HRReelAU.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/HRReelAU.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 1-8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 13-16.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 21-24.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 25-32.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/Marries Wedding_Bar 9-12.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Figures/figure.schema.json" beforeDir="false" afterPath="$PROJECT_DIR$/Figures/figure.schema.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dance_tree_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI_DanceCreator_App.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI_DanceCreator_App.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI_DanceCreator_App.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,40 +51,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.ComplexFigure.executor": "Debug",
-    "Python.DanceCreator.executor": "Run",
-    "Python.DanceCreatorUI.executor": "Run",
-    "Python.DanceCreator_old.executor": "Run",
-    "Python.DanceFloor.executor": "Run",
-    "Python.Dance_Tree.executor": "Run",
-    "Python.Figures.executor": "Run",
-    "Python.GUI_DanceCreator_App.executor": "Run",
-    "Python.KomplexFigure.executor": "Run",
-    "Python.SimpleFigure.executor": "Run",
-    "Python.app.executor": "Run",
-    "Python.dance_tree_app.executor": "Run",
-    "Python.dancecreator_server.executor": "Run",
-    "Python.scratch.executor": "Run",
-    "Python.scratch_1.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/Git/DanceCreator/templates",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.ComplexFigure.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.DanceCreator.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DanceCreatorUI.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DanceCreator_old.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DanceFloor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Dance_Tree.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Figures.executor&quot;: &quot;Run&quot;,
+    &quot;Python.GUI_DanceCreator_App.executor&quot;: &quot;Run&quot;,
+    &quot;Python.KomplexFigure.executor&quot;: &quot;Run&quot;,
+    &quot;Python.SimpleFigure.executor&quot;: &quot;Run&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dance_tree_app.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dancecreator_server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch_1.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Git/DanceCreator/templates&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "Python"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;Python&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Git\DanceCreator\templates" />
@@ -282,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760170287282</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="- Einlesen der Figure in Figuren_DB, anzeigen und Filtern in index.html funktioniert.">
+      <option name="closed" value="true" />
+      <created>1767196745787</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1767196745787</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -315,7 +288,8 @@
     <MESSAGE value="- mit KI erstelltes UI" />
     <MESSAGE value="- mit KI erstelltes UI in HTML5" />
     <MESSAGE value="- mit KI erstelltes UI in HTML5 2. versuch" />
-    <option name="LAST_COMMIT_MESSAGE" value="- mit KI erstelltes UI in HTML5 2. versuch" />
+    <MESSAGE value="- Einlesen der Figure in Figuren_DB, anzeigen und Filtern in index.html funktioniert." />
+    <option name="LAST_COMMIT_MESSAGE" value="- Einlesen der Figure in Figuren_DB, anzeigen und Filtern in index.html funktioniert." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

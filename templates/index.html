@@ -163,32 +163,51 @@ function loadFigures() {
             data.forEach(fig => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // Setze formation (falls vorhanden) für das Filtern
-                const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || fig.formation || '';
+                // sorge dafür, dass Inhalte oben ausgerichtet sind
+                card.style.alignItems = 'flex-start';
+
+                // Formation als dataset (für Filter)
+                const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || '';
                 card.dataset.formation = formation.toString().toLowerCase();
 
-                // Store full data as JSON string for potential later use
+                // Volle Daten sichern, aber nicht anzeigen
                 card.dataset.full = JSON.stringify(fig);
 
-                // Zeige alle Infos: Name + Kurzinfo + komplettes Objekt (pre)
-                const name = fig.name || fig.Name || '';
-                const type = fig.type || '';
-                const desc = fig.desc || fig.Description || fig.description || '';
+                // Linker Bereich: Name + Description (Description OHNE problematische CSS-Klasse)
+                const left = document.createElement('div');
+                left.className = 'left';
+                left.style.overflow = 'visible';
+                left.style.minWidth = '0';
 
-                const pre = document.createElement('pre');
-                pre.className = 'figure-data';
-                pre.textContent = JSON.stringify(fig, null, 2);
+                const nameStrong = document.createElement('strong');
+                nameStrong.textContent = fig.name || fig.Name || 'Unnamed';
+                nameStrong.style.display = 'block';
 
-                card.innerHTML = `
-                    <strong>${name}</strong><br>
-                    Formation: ${formation || '—'}<br>
-                    Typ: ${type || '—'}<br>
-                    <em>${desc || ''}</em>
-                `;
+                const descVisible = document.createElement('p');
+                descVisible.textContent = fig.desc || fig.Desc || 'no description';
+                descVisible.style.display = 'block';
 
-                card.appendChild(pre);
+
+
+                left.appendChild(nameStrong);
+                left.appendChild(descVisible);
+
+                // Rechter Bereich: Bars (robust)
+                const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
+                const barsText = (barsVal === undefined || barsVal === null || barsVal === '') ? '—' : barsVal;
+                const barsDiv = document.createElement('div');
+                barsDiv.className = 'bars';
+                barsDiv.textContent = 'Bars: ' + barsText;
+
+                // Karte zusammensetzen
+                card.appendChild(left);
+                card.appendChild(barsDiv);
+
                 container.appendChild(card);
             });
+
+            // Falls applyFilters existiert, anwenden
+            if (typeof applyFilters === 'function') applyFilters();
         })
         .catch(err => console.error('Fehler beim Laden der Figuren:', err));
 }

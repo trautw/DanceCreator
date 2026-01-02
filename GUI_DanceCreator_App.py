@@ -62,12 +62,12 @@ def load_Figuers():
             name = data.get('Name') or data.get('name') or fname[:-5]
             # ensure we keep the original object but mark type if possible
             Figure_DB[name] = data
-            if 'FigureList' in Figure_DB[name]:
-                Figure_DB[name]['type'] = 'complex'
-            elif 'Addons' in Figure_DB[name]:
-                Figure_DB[name]['type'] = 'simple'
-            else:
-                Figure_DB[name].setdefault('type', 'unknown')
+#            if 'FigureList' in Figure_DB[name]:
+#                Figure_DB[name]['type'] = 'complex'
+#            elif 'Addons' in Figure_DB[name]:
+#                Figure_DB[name]['type'] = 'simple'
+#            else:
+#                Figure_DB[name].setdefault('type', 'unknown')
 
         except Exception:
             # ignore files that can't be parsed
@@ -138,7 +138,6 @@ def get_nodes(node_Name):
             "id": "Dance (leer)",
             "parent_id": None,
             "name": "Dance (leer)",
-            "type": "simple",
             "meta": {}
         }
     return node
@@ -176,7 +175,6 @@ def tree():
             "id": 1,
             "parent_id": None,
             "name": "Dance (leer)",
-            "type": "root",
             "meta": {}
         }]
         return jsonify(nodes)
@@ -191,7 +189,6 @@ def tree():
                     "id": i + 1,
                     "parent_id": None,
                     "name": item.get('Name') or item.get('name') or str(i + 1),
-                    "type": item.get('type', 'unknown'),
                     "meta": item
                 })
 
@@ -200,7 +197,6 @@ def tree():
             "id": 1,
             "parent_id": None,
             "name": "Dance (leer)",
-            "type": "root",
             "meta": {}
         }]
     return jsonify(nodes)
@@ -224,7 +220,9 @@ def figures():
 
         # Einheitliche Zusatzfelder, die die GUI erwarten kann
         item.setdefault('name', item.get('Name') or item.get('name') or key)
-        item.setdefault('type', item.get('type') or 'unknown')
+        # Entferne das Feld 'type', es wird nicht mehr benötigt
+        if 'type' in item:
+            item.pop('type', None)
         # key ist der Schlüssel in Figure_DB (kann z.B. vom Dateinamen abgeleitet worden sein)
         item['key'] = key
 
