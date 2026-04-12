@@ -5,11 +5,11 @@ import DanceFloor as DF
 Floor = DF.DanceFloor('Marrie\'s Wedding',3)
 print(Floor)
 #print('### First 8 Bars ###')
-Marrie = Dance.getFigure( 					[[[0,0], ["Marries Wedding_Bar 1-8"  ,[]]],
-, [1,1])
+Marrie = Dance.getDance( "Marries Wedding_all")
 Dance.showCrips(Marrie, Floor)
 Floor = Marrie.DanceMove(Floor)
 print(Floor)
+'''
 #print('### third 4 Bars ###')
 Marrie = Dance.getFigure( 'Marries Wedding_Bar 9-12', [1,1])
 Dance.showCrips(Marrie, Floor)
@@ -38,3 +38,4 @@ Marrie = Dance.getFigure( '6Hrb', [1,1],[])
 Dance.showCrips(Marrie, Floor)
 Floor = Marrie.DanceMove(Floor)
 print(Floor)
+'''

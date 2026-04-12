@@ -95,7 +95,19 @@ class ComplexFigure(Fig.Figure):
         if Filename == '':
             Filename = self.name
 
-        with open(os.getcwd()+'/Figures/' + Filename + '.json', 'r') as f:
+        # Determine the actual file path.
+        # If an absolute path or a path containing separators is provided, use it (ensure .json suffix).
+        # Otherwise, assume the file is in the project's Figures directory and append .json.
+        if os.path.isabs(Filename) or (os.path.sep in Filename) or ('/' in Filename):
+            filepath = Filename if Filename.lower().endswith('.json') else Filename + '.json'
+        else:
+            filepath = os.path.join(os.getcwd(), 'Figures', Filename + '.json')
+
+        # Check if the file exists before attempting to open it.
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"Figure file not found: {filepath}")
+
+        with open(filepath, 'r') as f:
             FigData = json.load(f)
         myKeys = FigData.keys()
         if 'Version' in myKeys:

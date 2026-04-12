@@ -233,6 +233,19 @@ def figures():
     return jsonify(result)
 
 
+@app.route('/dances')
+def list_dances():
+    """Gibt eine alphabetisch sortierte Liste der .json Dateien im DANCES_DIR zurück."""
+    try:
+        if not os.path.isdir(DANCES_DIR):
+            return jsonify({'error': 'Dances directory not found'}), 404
+        files = [f for f in os.listdir(DANCES_DIR) if f.lower().endswith('.json')]
+        files.sort()
+        return jsonify(files)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == "__main__":
     os.makedirs(FIGURES_DIR, exist_ok=True)
     load_Figuers()

@@ -2,9 +2,18 @@ from SimpleFigure import SimpleFigure
 import json
 import os
 
+def getDance(Filename):
+    from ComplexFigure import ComplexFigure  # Lazy Import, um zirkulären Import zu vermeiden
+
+    myDance = ComplexFigure(os.path.join(os.getcwd(), 'Dances', Filename + '.json'), [0,0])
+    myDance.loadFigure()
+
+    return myDance
+
 def getFigure(Filename, Anchor = [0,0], Addons = []):
     from ComplexFigure import ComplexFigure  # Lazy Import, um zirkulären Import zu vermeiden
-    with open(os.getcwd()+'/Figures/' + Filename + '.json', 'r') as f:
+
+    with open(os.path.join(os.getcwd(), 'Figures', Filename + '.json'), 'r') as f:
         FigData = json.load(f)
 
     if 'FigureList' in FigData.keys():

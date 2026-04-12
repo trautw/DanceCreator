@@ -12,7 +12,7 @@ class SimpleFigure(Figures.Figure):
         self.clear()
         self.name = loadFile
         self.Anchor = Anchor
-        #self.loadFigure(loadFile, Addons)
+        self.loadFigure(loadFile, Addons)
 
     def clear(self):
         super().clear()

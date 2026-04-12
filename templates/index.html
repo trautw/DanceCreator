@@ -114,8 +114,50 @@ document.body.appendChild(fileInput);
 
 // Load-Button klick → Datei-Auswahl
 document.getElementById('btn-load').addEventListener('click', () => {
-    fileInput.click();
+    // Anfrage an Backend: liste der Dance .json Dateien im DANCES_DIR
+    fetch('/dances')
+        .then(res => res.json())
+        .then(list => {
+            if (!list || !Array.isArray(list) || list.length === 0) {
+                alert('Keine Dance-Dateien auf dem Server gefunden.');
+                return;
+            }
+            showDanceSelectionModal(list);
+        })
+        .catch(err => {
+            console.error('Fehler beim Abfragen der Dance-Liste:', err);
+            alert('Fehler beim Abfragen der Dance-Liste');
+        });
 });
+
+// Einfaches Modal zur Auswahl einer Datei aus dem Server-Verzeichnis
+function showDanceSelectionModal(files) {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed'; overlay.style.left = 0; overlay.style.top = 0;
+    overlay.style.right = 0; overlay.style.bottom = 0; overlay.style.background = 'rgba(0,0,0,0.4)';
+    overlay.style.zIndex = 10000;
+
+    const box = document.createElement('div');
+    box.style.width = '480px'; box.style.maxWidth = '90%'; box.style.margin = '12vh auto';
+    box.style.background = '#fff'; box.style.borderRadius = '6px'; box.style.padding = '12px';
+    box.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)';
+
+    const title = document.createElement('h4'); title.textContent = 'Dance-Datei wählen'; title.style.margin = '0 0 8px 0';
+    box.appendChild(title);
+
+    const select = document.createElement('select'); select.style.width = '100%'; select.style.padding = '6px';
+    files.forEach(f => { const opt = document.createElement('option'); opt.value = f; opt.textContent = f; select.appendChild(opt); });
+    box.appendChild(select);
+
+    const btnRow = document.createElement('div'); btnRow.style.display = 'flex'; btnRow.style.justifyContent = 'flex-end'; btnRow.style.gap = '8px'; btnRow.style.marginTop = '10px';
+    const btnCancel = document.createElement('button'); btnCancel.textContent = 'Abbrechen'; btnCancel.style.padding = '6px 10px';
+    btnCancel.addEventListener('click', () => document.body.removeChild(overlay));
+    const btnOk = document.createElement('button'); btnOk.textContent = 'Laden'; btnOk.style.padding = '6px 10px';
+    btnOk.addEventListener('click', () => { const chosen = select.value; if (chosen) reloadTreeFromFile(chosen); document.body.removeChild(overlay); });
+    btnRow.appendChild(btnCancel); btnRow.appendChild(btnOk); box.appendChild(btnRow);
+
+    overlay.appendChild(box); document.body.appendChild(overlay); select.focus();
+}
 
 // Wenn Datei gewählt → an /tree senden
 fileInput.addEventListener('change', () => {
@@ -130,188 +172,119 @@ fileInput.addEventListener('change', () => {
 
 // Funktion zum Neuladen des Trees
 function reloadTreeFromFile(fileName) {
-    $('#treeview').jstree(true).settings.core.data = {
-        url: `/tree?file=${fileName}`,
-        dataType: 'json'
-    };
-    $('#treeview').jstree(true).refresh();
-}
-</script>
-
-
-<script>
-          <!-- *********************** -->
-          <!-- *** Tree funktionen *** -->
-          <!-- *********************** -->
-
-$(function() {
-  $('#treeview').jstree({
-    'core': {
-      'data': [
-        { "text": "Dance", "id": "dance-node" }
-      ]
-    }
-  });
-});
-</script>
-
-<script>
-function loadFigures() {
-    // Lade Figuren und baue kompakte Karten (nur Name / Desc / Bars)
-    fetch('/figures')
-        .then(response => response.json())
-        .then(data => {
-            if (typeof populateFormationOptions === 'function') populateFormationOptions(data);
-
-            const container = document.getElementById('figure-list');
-            container.innerHTML = '';
-
-            data.forEach(fig => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.alignItems = 'flex-start';
-
-                // Formation als dataset (für Filter)
-                const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || '';
-                card.dataset.formation = formation.toString().toLowerCase();
-
-                // Volle Daten sichern
-                card.dataset.full = JSON.stringify(fig);
-
-                // Linker Bereich: Name + Description
-                const left = document.createElement('div');
-                left.className = 'left';
-                left.style.overflow = 'visible';
-                left.style.minWidth = '0';
-
-                const nameStrong = document.createElement('strong');
-                nameStrong.textContent = fig.name || fig.Name || 'Unnamed';
-                nameStrong.style.display = 'block';
-
-                const descVisible = document.createElement('p');
-                descVisible.textContent = fig.desc || fig.Description || fig.Desc || fig.description || '';
-                descVisible.style.display = 'block';
-                descVisible.style.margin = '4px 0 0 0';
-                descVisible.style.color = '#444';
-                descVisible.style.fontSize = '0.9rem';
-                descVisible.style.lineHeight = '1.2';
-                descVisible.style.overflow = 'visible';
-                descVisible.style.maxHeight = 'none';
-                descVisible.style.whiteSpace = 'normal';
-                descVisible.style.textOverflow = 'clip';
-
-                left.appendChild(nameStrong);
-                left.appendChild(descVisible);
-
-                // Rechter Bereich: Bars
-                const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
-                const barsText = (barsVal === undefined || barsVal === null || barsVal === '') ? '—' : barsVal;
-                const barsDiv = document.createElement('div');
-                barsDiv.className = 'bars';
-                barsDiv.textContent = 'Bars: ' + barsText;
-
-                card.appendChild(left);
-                card.appendChild(barsDiv);
-
-                // Klick-Handler: zeige vollständige Infos im Arbeitsbereich
-                card.addEventListener('click', function() {
-                    // markiere Auswahl
-                    document.querySelectorAll('#figure-list .card').forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    // zeige Details
-                    displayFigureDetails(fig);
-                });
-
-                container.appendChild(card);
+    // Hole die flache Knotenliste vom Backend und mappe sie in jsTree-Format
+    fetch(`/tree?file=${encodeURIComponent(fileName)}`)
+        .then(res => res.json())
+        .then(nodes => {
+            // nodes erwartet eine Liste von Objekten, evtl. mit 'id', 'parent_id', 'name'/'text', 'meta'
+            const jsNodes = (Array.isArray(nodes) ? nodes : []).map(n => {
+                const id = (n.id !== undefined && n.id !== null) ? String(n.id) : (n.name || n.text || Math.random().toString(36).slice(2));
+                const parent = (n.parent_id === null || n.parent_id === undefined) ? '#' : String(n.parent_id);
+                return {
+                    id: id,
+                    parent: parent,
+                    text: n.text || n.name || String(id),
+                    children: (n.children === true) || (n.hasOwnProperty('children') && Array.isArray(n.children) ? n.children : false),
+                    li_attr: { meta: n.meta || n }
+                };
             });
 
-            if (typeof applyFilters === 'function') applyFilters();
+            // Falls kein jsTree existiert, initialisiere ihn; sonst setze die Daten neu
+            const inst = $('#treeview').jstree(true);
+            if (!inst) {
+                $('#treeview').jstree({
+                    'core': {
+                        'data': jsNodes,
+                        'check_callback': true
+                    }
+                });
+            } else {
+                inst.settings.core.data = jsNodes;
+                inst.refresh();
+            }
         })
-        .catch(err => console.error('Fehler beim Laden der Figuren:', err));
+        .catch(err => {
+            console.error('Fehler beim Laden des Trees:', err);
+            alert('Fehler beim Laden des Tree vom Server');
+        });
+}
+</script>
+
+
+<script>
+// Erzeugt und füllt den jsTree mit einer Beispiel-Dance-Struktur.
+// Wird beim ersten Laden der Seite einmalig ausgeführt.
+function populateJsTree() {
+    const nodes = [
+        { id: 'dance-node', parent: '#', text: 'Dance', li_attr: { meta: { Set: '1C-Longwise Set' } } },
+        { id: 'n1', parent: 'dance-node', text: '1cCast1p', li_attr: { meta: {} } },
+        { id: 'complex-1', parent: 'dance-node', text: 'ComplexFigure', state: { opened: true }, li_attr: { meta: {} } },
+        { id: 'c1', parent: 'complex-1', text: '1cRT', li_attr: { meta: {} } },
+        { id: 'c2', parent: 'complex-1', text: '1cWait', li_attr: { meta: {} } },
+        { id: 'n3', parent: 'dance-node', text: '6Hrb', li_attr: { meta: {} } }
+    ];
+
+    // Falls jsTree noch nicht existiert, initialisiere ihn; sonst setze die Daten neu
+    const inst = $('#treeview').jstree(true);
+    if (!inst) {
+        $('#treeview').jstree({
+            'core': {
+                'data': nodes,
+                'check_callback': true
+            },
+            'plugins': ['dnd'],
+            'dnd': {
+                'inside_pos': 'last',
+                'check_while_dragging': true
+            }
+        });
+
+        // Ermögliche das Hinzufügen externer Elemente per HTML5-Drop
+        const treeEl = document.getElementById('treeview');
+        treeEl.addEventListener('dragover', function(e) { e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'; });
+        treeEl.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const tree = $('#treeview').jstree(true);
+            if (!tree) return;
+
+            // Versuch zuerst custom MIME-Type, dann generisches JSON/Text
+            const raw = e.dataTransfer.getData('application/x-figure') || e.dataTransfer.getData('application/json') || e.dataTransfer.getData('text/plain');
+            if (!raw) return;
+            let fig;
+            try { fig = JSON.parse(raw); } catch (err) { console.warn('Drop: keine gültige JSON-Figur:', err); return; }
+
+            // Bestimme Ziel-Node (nächstes li-Element)
+            let el = e.target;
+            while (el && el !== treeEl && el.tagName !== 'LI') el = el.parentNode;
+            let parentId = '#';
+            if (el && el !== treeEl && el.tagName === 'LI') parentId = el.id;
+
+            const label = fig.name || fig.Name || fig.text || 'NewFigure';
+            const nodeData = {
+                text: label,
+                li_attr: { meta: fig }
+            };
+
+            // Erstelle Knoten
+            tree.create_node(parentId, nodeData, 'last', function(created) {
+                // öffne Parent, falls geschlossen
+                try { tree.open_node(parentId); } catch (e) {}
+            });
+        });
+
+    } else {
+        inst.settings.core.data = nodes;
+        inst.settings.plugins = inst.settings.plugins || [];
+        if (!inst.settings.plugins.includes('dnd')) inst.settings.plugins.push('dnd');
+        inst.refresh();
+    }
 }
 
-// Hilfsfunktion: zeigt alle bekannten Informationen einer Figur im Arbeitsbereich an
-function displayFigureDetails(fig) {
-    const middle = document.getElementById('middle');
-    // Überschreibe Inhalt, lasse Überschrift bestehen
-    middle.innerHTML = '<h3>Arbeitsbereich</h3>';
+// Einmaliger Aufruf beim Laden der Seite
+document.addEventListener('DOMContentLoaded', function() {
+    populateJsTree();
+});
 
-    const wrapper = document.createElement('div');
-    wrapper.style.padding = '8px';
-
-    // Titel / Name
-    const title = document.createElement('h4');
-    title.textContent = fig.name || fig.Name || 'Unnamed';
-    wrapper.appendChild(title);
-
-    // Description
-    const desc = document.createElement('p');
-    desc.textContent = fig.desc || fig.Description || fig.Desc || fig.description || '';
-    desc.style.marginTop = '6px';
-    desc.style.color = '#333';
-    wrapper.appendChild(desc);
-
-    // Meta-Liste (Formation, Bars)
-    const metaList = document.createElement('ul');
-    metaList.style.paddingLeft = '18px';
-    metaList.style.marginTop = '8px';
-
-    const formationLi = document.createElement('li');
-    formationLi.textContent = 'Formation: ' + (fig.Formation || fig.formation || fig.formationType || fig.formation_name || '—');
-    metaList.appendChild(formationLi);
-
-    const barsLi = document.createElement('li');
-    const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
-    barsLi.textContent = 'Bars: ' + ((barsVal === undefined || barsVal === null || barsVal === '') ? '—' : barsVal);
-    metaList.appendChild(barsLi);
-
-    wrapper.appendChild(metaList);
-
-    // Tabelle mit allen Feldern
-    const table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.borderCollapse = 'collapse';
-    table.style.marginTop = '10px';
-
-    Object.keys(fig).forEach(key => {
-        const tr = document.createElement('tr');
-        const tdKey = document.createElement('td');
-        tdKey.textContent = key;
-        tdKey.style.width = '30%';
-        tdKey.style.padding = '4px 8px';
-        tdKey.style.fontWeight = '600';
-        tdKey.style.verticalAlign = 'top';
-
-        const tdVal = document.createElement('td');
-        let val = fig[key];
-        if (typeof val === 'object') {
-            try { val = JSON.stringify(val); } catch (e) { val = String(val); }
-        }
-        tdVal.textContent = val === undefined || val === null ? '' : String(val);
-        tdVal.style.padding = '4px 8px';
-        tdVal.style.color = '#222';
-
-        tr.appendChild(tdKey);
-        tr.appendChild(tdVal);
-        table.appendChild(tr);
-    });
-
-    wrapper.appendChild(table);
-
-    // Vollständiges JSON (ausklappbar)
-    const pre = document.createElement('pre');
-    pre.textContent = JSON.stringify(fig, null, 2);
-    pre.style.background = '#f7f7f7';
-    pre.style.padding = '8px';
-    pre.style.borderRadius = '4px';
-    pre.style.marginTop = '10px';
-    pre.style.maxHeight = '240px';
-    pre.style.overflow = 'auto';
-
-    wrapper.appendChild(pre);
-
-    middle.appendChild(wrapper);
-}
 
 // automatische Befüllung des Formation-Filters (wird von loadFigures aufgerufen)
 function populateFormationOptions(data) {
@@ -357,6 +330,121 @@ function populateFormationOptions(data) {
 
     // Filter aktualisieren
     if (typeof applyFilters === 'function') applyFilters();
+}
+
+// Stellt die Karten auf der linken Seite wieder her: lädt /figures und baut die Kartelemente auf
+function loadFigures() {
+    fetch('/figures')
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data)) return;
+            if (typeof populateFormationOptions === 'function') populateFormationOptions(data);
+
+            const container = document.getElementById('figure-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            data.forEach(fig => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.display = 'flex';
+                card.style.justifyContent = 'space-between';
+                card.style.padding = '6px 8px';
+                card.style.border = '1px solid #ddd';
+                card.style.borderRadius = '4px';
+                card.style.marginBottom = '6px';
+                card.style.alignItems = 'center';
+
+                // Formation als dataset für Filter
+                const formation = fig.Formation || fig.formation || fig.formationType || fig.formation_name || '';
+                card.dataset.formation = formation.toString().toLowerCase();
+
+                // komplette Figur als data-Attribut
+                try { card.dataset.full = JSON.stringify(fig); } catch (e) { card.dataset.full = '' }
+
+                // Linker Bereich: Name + Description
+                const left = document.createElement('div');
+                left.style.flex = '1';
+                left.style.minWidth = '0';
+
+                const nameEl = document.createElement('strong');
+                nameEl.textContent = fig.name || fig.Name || fig.text || 'Unnamed';
+                nameEl.style.display = 'block';
+                nameEl.style.whiteSpace = 'nowrap';
+                nameEl.style.overflow = 'hidden';
+                nameEl.style.textOverflow = 'ellipsis';
+
+                const descEl = document.createElement('div');
+                descEl.textContent = fig.Desc || '';
+                descEl.style.fontSize = '0.9rem';
+                descEl.style.color = '#444';
+                // Mehrzeilige Beschreibung anzeigen, max. ~2 Zeilen mit Ellipsis
+                descEl.style.display = 'block';
+                descEl.style.whiteSpace = 'normal';
+                descEl.style.overflow = 'hidden';
+                descEl.style.textOverflow = 'ellipsis';
+                descEl.style.lineHeight = '1.2';
+                descEl.style.maxHeight = '2.4em';
+                descEl.style.marginTop = '3px';
+
+                left.appendChild(nameEl);
+                left.appendChild(descEl);
+
+                // Rechter Bereich: Bars
+                const right = document.createElement('div');
+                right.style.marginLeft = '8px';
+                right.style.flex = '0 0 auto';
+                const barsVal = (fig.Bars ?? fig.bars ?? fig.barsCount ?? fig.BarsCount ?? fig.bar ?? fig.Bar);
+                right.textContent = (barsVal === undefined || barsVal === null || barsVal === '') ? 'Bars: —' : 'Bars: ' + barsVal;
+                right.style.fontSize = '0.9rem';
+                right.style.color = '#333';
+
+                card.appendChild(left);
+                card.appendChild(right);
+
+                // draggable: erlaubt Drag von Figuren in den Tree
+                card.setAttribute('draggable', 'true');
+                card.addEventListener('dragstart', function(e) {
+                    try {
+                        e.dataTransfer.setData('application/x-figure', JSON.stringify(fig));
+                        e.dataTransfer.setData('application/json', JSON.stringify(fig));
+                        e.dataTransfer.effectAllowed = 'copy';
+                    } catch (err) { /* ignore */ }
+                });
+
+                // Klick: markiere und zeige Details
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('#figure-list .card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    try { displayFigureDetails(fig); } catch (e) { console.warn(e); }
+                });
+
+                container.appendChild(card);
+            });
+
+            if (typeof applyFilters === 'function') applyFilters();
+        })
+        .catch(err => { console.error('Fehler beim Laden der Figuren:', err); });
+}
+
+// Einfache Anzeige der vollständigen Figur im Arbeitsbereich (mittlere Spalte)
+function displayFigureDetails(fig) {
+    const middle = document.getElementById('middle');
+    if (!middle) return;
+    middle.innerHTML = '<h3>Arbeitsbereich</h3>';
+
+    const wrap = document.createElement('div'); wrap.style.padding = '8px';
+    const title = document.createElement('h4'); title.textContent = fig.name || fig.Name || fig.text || 'Unnamed';
+    wrap.appendChild(title);
+
+    const desc = document.createElement('p'); desc.textContent = fig.desc || fig.Description || fig.description || '';
+    wrap.appendChild(desc);
+
+    const pre = document.createElement('pre'); pre.textContent = JSON.stringify(fig, null, 2);
+    pre.style.background = '#f7f7f7'; pre.style.padding = '8px'; pre.style.borderRadius = '4px'; pre.style.maxHeight = '240px'; pre.style.overflow = 'auto';
+    wrap.appendChild(pre);
+
+    middle.appendChild(wrap);
 }
 
 // Filter- und Suchfunktion: wendet den ausgewählten Formation-Filter und Suche auf die Cards an
