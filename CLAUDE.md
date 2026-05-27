@@ -17,8 +17,8 @@ UI strings, comments, and most identifiers are German. Class/method names and JS
 # Activate the in-repo venv (Python 3.13)
 source .venv/bin/activate
 
-# Install the only dependency (no requirements.txt exists)
-pip install flask
+# Install dependencies (only Flask)
+pip install -r requirements.txt
 
 # Run the web GUI → http://127.0.0.1:5000
 python GUI_DanceCreator_App.py
